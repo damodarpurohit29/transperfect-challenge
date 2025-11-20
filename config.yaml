@@ -1,0 +1,108 @@
+project:
+  models_dir: "models"
+  results_dir: "results"
+  device: "auto"
+  random_seed: 42
+
+challenge_1:
+  encoder_decoder:
+    enabled: true
+    base_model: "Helsinki-NLP/opus-mt-en-nl"
+    output_dir: "models/c1_en_nl_finetuned"
+    training:
+      max_input_length: 128
+      max_target_length: 128
+      learning_rate: 2.0e-5
+      num_train_epochs: 2
+      per_device_train_batch_size: 16
+      per_device_eval_batch_size: 16
+      gradient_accumulation_steps: 1
+      optim: "adamw_torch"
+      weight_decay: 0.01
+      warmup_steps: 50
+      predict_with_generate: true
+      fp16: false
+      logging_steps: 50
+      evaluation_strategy: "steps"
+      eval_steps: 100
+      save_steps: 100
+      save_strategy: "steps"
+      save_total_limit: 1
+      load_best_model_at_end: true
+      metric_for_best_model: "bleu"
+      greater_is_better: true
+    evaluation:
+      batch_size: 16
+      num_beams: 4
+      max_length: 128
+
+  decoder_only_lora:
+    enabled: false
+    base_model: "facebook/xglm-564M"
+    output_dir: "models/c1_en_nl_lora"
+    lora_config:
+      r: 16
+      lora_alpha: 32
+      lora_dropout: 0.1
+      target_modules: ["q_proj", "v_proj"]
+      bias: "none"
+      task_type: "CAUSAL_LM"
+    training:
+      max_input_length: 256
+      max_target_length: 256
+      learning_rate: 3.0e-4
+      num_train_epochs: 2
+      per_device_train_batch_size: 4
+      per_device_eval_batch_size: 4
+      gradient_accumulation_steps: 2
+      optim: "adamw_torch"
+      weight_decay: 0.01
+      warmup_steps: 50
+      fp16: false
+      logging_steps: 25
+      evaluation_strategy: "steps"
+      eval_steps: 50
+      save_steps: 50
+      save_strategy: "steps"
+      save_total_limit: 1
+    evaluation:
+      batch_size: 8
+      num_beams: 4
+      max_length: 256
+
+  data:
+    training_dataset_name: "opus100"
+    training_dataset_lang_pair: "en-nl"
+    training_sample_size: 2000
+    domain_test_set_path: "data/Dataset_Challenge_1.xlsx"
+    columns:
+      source: "English Source"
+      target: "Reference Translation"
+
+challenge_2:
+  enabled: true
+  model:
+    base: "xlm-roberta-base"
+    output_dir: "models/c2_en_es_qe"
+  data:
+    dataset_path: "data/Dataset_Challenge_2.xlsx"
+    test_size: 0.2
+    random_seed: 42
+    max_length: 128
+    columns:
+      source: "English Source"
+      mt: "MT System"
+      post_edit: "Post-Edit Text"
+  training:
+    learning_rate: 3.0e-5
+    num_train_epochs: 5
+    per_device_train_batch_size: 8
+    per_device_eval_batch_size: 8
+    weight_decay: 0.01
+    warmup_steps: 25
+    logging_steps: 10
+    eval_steps: 50
+    evaluation_strategy: "steps"
+    save_strategy: "steps"
+    save_total_limit: 1
+    load_best_model_at_end: true

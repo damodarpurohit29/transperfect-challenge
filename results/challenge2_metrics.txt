@@ -1,0 +1,32 @@
+======================================================================
+Challenge 2 - Quality Estimation Evaluation Results
+======================================================================
+
+Model: xlm-roberta-base (fine-tuned for QE)
+Test samples: 14
+Task: Predict MT quality (edit distance)
+
+----------------------------------------------------------------------
+REGRESSION METRICS:
+----------------------------------------------------------------------
+MAE (Mean Absolute Error):      0.1450
+MSE (Mean Squared Error):       0.0411
+RMSE (Root Mean Squared Error): 0.2028
+
+----------------------------------------------------------------------
+CORRELATION METRICS:
+----------------------------------------------------------------------
+Pearson Correlation:  0.5888 (p-value: 0.0267)
+Spearman Correlation: 0.4066 (p-value: 0.1491)
+
+----------------------------------------------------------------------
+INTERPRETATION:
+----------------------------------------------------------------------
+Average prediction error: ±0.1450
+ Moderate positive correlation with true quality
+ Correlation is statistically significant (p < 0.05)
+
+----------------------------------------------------------------------
+QUALITY ASSESSMENT:
+----------------------------------------------------------------------
+ Good prediction accuracy (MAE < 0.15)
