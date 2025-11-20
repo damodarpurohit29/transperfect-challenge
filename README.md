@@ -14,12 +14,13 @@
 - [Challenge 2: Quality Estimation](#challenge-2-quality-estimation)
 - [Results Summary](#results-summary)
 - [Technical Details](#technical-details)
-- [Future Improvements](#future-improvements)
-- [License](#license)
+- [Usage Examples](#usage-examples)
+- [Acknowledgments](#acknowledgments)
+- [Contact](#contact)
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This project implements two ML challenges for translation and quality assessment:
 
@@ -36,7 +37,7 @@ This project implements two ML challenges for translation and quality assessment
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 transperfect_challenge/
@@ -73,7 +74,7 @@ transperfect_challenge/
 
 ---
 
-## 🔧 Requirements
+## Requirements
 
 ### System Requirements
 - Python 3.8+
@@ -89,7 +90,7 @@ See `requirements.txt` for complete list. Key packages:
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Step 1: Clone Repository
 
@@ -126,7 +127,7 @@ python -c "import torch, transformers; print('✅ Installation successful!')"
 
 ---
 
-## 🌍 Challenge 1: Machine Translation
+## Challenge 1: Machine Translation
 
 ### Task Description
 Fine-tune a pre-trained MarianMT model (Helsinki-NLP/opus-mt-en-nl) for domain-specific English→Dutch translation in the software/IT domain.
@@ -183,7 +184,7 @@ Files generated:
 
 ---
 
-## 🎯 Challenge 2: Quality Estimation
+## Challenge 2: Quality Estimation
 
 ### Task Description
 Build a quality estimation system that predicts translation quality (edit distance) without reference translations.
@@ -243,7 +244,7 @@ Files generated:
 
 ---
 
-## 📊 Results Summary
+## Results Summary
 
 ### Challenge 1: Translation Quality
 
@@ -288,7 +289,7 @@ Status:      ✅ Correct synonym
 
 ---
 
-## 🔬 Technical Details
+## Technical Details
 
 ### Challenge 1: Implementation Details
 
@@ -347,104 +348,9 @@ Edit Distance = 1 - SequenceMatcher(MT, Post-Edit).ratio()
 Range: [0, 1] where 0 = perfect, 1 = completely different
 ```
 
----
 
-## 🚀 Usage Examples
 
-### Training from Scratch
-
-```bash
-# Full pipeline for both challenges
-
-# Challenge 1
-python src/challenge_1/train.py        # ~40 min
-python src/challenge_1/evaluate.py     # ~2 min
-
-# Challenge 2  
-python src/challenge_2/train.py        # ~5 min
-python src/challenge_2/evaluate.py     # ~1 min
-```
-
-### Using Trained Models
-
-```python
-# Challenge 1: Translate new text
-from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
-
-model = AutoModelForSeq2SeqLM.from_pretrained("models/c1_en_nl_finetuned")
-tokenizer = AutoTokenizer.from_pretrained("models/c1_en_nl_finetuned")
-
-text = "Click the button to save"
-inputs = tokenizer(text, return_tensors="pt")
-outputs = model.generate(**inputs, max_length=256, num_beams=5)
-translation = tokenizer.decode(outputs[0], skip_special_tokens=True)
-print(translation)  # "Klik op de knop om op te slaan"
-```
-
-```python
-# Challenge 2: Predict quality
-from transformers import AutoModelForSequenceClassification, AutoTokenizer
-import torch
-
-model = AutoModelForSequenceClassification.from_pretrained("models/c2_en_es_qe")
-tokenizer = AutoTokenizer.from_pretrained("models/c2_en_es_qe")
-
-source = "Save changes"
-mt = "Guardar cambios"
-input_text = f"QE Source: {source} {tokenizer.sep_token} MT: {mt}"
-
-inputs = tokenizer(input_text, return_tensors="pt")
-with torch.no_grad():
-    quality = model(**inputs).logits.item()
-    
-print(f"Quality Score: {quality:.3f}")  # Lower = better quality
-```
-
----
-
-## 💡 Future Improvements
-
-### Challenge 1: Translation
-- [ ] Train on larger domain-specific corpus (50K+ samples)
-- [ ] Implement backtranslation for data augmentation
-- [ ] Experiment with larger models (mBART, NLLB)
-- [ ] Add terminology constraints for technical terms
-- [ ] Implement beam search optimization
-
-### Challenge 2: Quality Estimation
-- [ ] Collect more training data (5K+ samples recommended)
-- [ ] Multi-task learning with DA (Direct Assessment) scores
-- [ ] Ensemble multiple QE models
-- [ ] Feature engineering (e.g., source complexity metrics)
-- [ ] Cross-lingual transfer from high-resource language pairs
-
-### General
-- [ ] Add unit tests and integration tests
-- [ ] Implement continuous evaluation pipeline
-- [ ] Docker containerization for reproducibility
-- [ ] API deployment for production use
-- [ ] Logging and monitoring infrastructure
-
----
-
-## 📝 Lessons Learned
-
-### Data Quality vs Quantity
-- Small high-quality datasets (2000 samples) can yield good results with proper fine-tuning
-- Domain-specific test sets reveal true model performance better than in-domain validation
-
-### Metric Selection
-- BLEU alone is insufficient; chrF and TER provide complementary insights
-- For QE, correlation metrics (Pearson, Spearman) are more informative than MAE alone
-
-### Training Efficiency
-- Disabling evaluation during training saves memory and time
-- Separate comprehensive evaluation scripts provide better analysis
-- CPU training is viable for small-scale fine-tuning (though slower)
-
----
-
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **Base Models:** 
   - Helsinki-NLP for opus-mt-en-nl
@@ -459,22 +365,16 @@ print(f"Quality Score: {quality:.3f}")  # Lower = better quality
 
 ---
 
-## 📄 License
-
-This project is submitted as part of the TransPerfect AI/ML Technical Assessment.
-
----
-
-## 👤 Contact
+## Contact
 
 For questions or clarifications:
-- **Name:** [Your Name]
-- **Email:** [Your Email]
-- **Date:** November 2025
+- **Name:** Damodar Purohit
+- **Email:** damodarpurohit29@gmail.com
+
 
 ---
 
-## 🎯 Quick Start Commands
+## Quick Start
 
 ```bash
 # Setup
